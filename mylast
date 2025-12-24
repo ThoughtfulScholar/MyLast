@@ -1,0 +1,34 @@
+#!/bin/bash
+
+LIMIT=""
+START_EPOCH=""
+END_EPOCH=""
+USER_FILTER=""
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+	-n)
+            LIMIT="$2"
+            [ -z "$LIMIT" ] && { echo "Limita invalida"; exit 1; }
+            shift 2
+            ;;
+        -p)
+            USER_FILTER="$2"
+            [ -z "$USER_FILTER" ] && { echo "User invalid"; exit 1; }
+            shift 2
+            ;;
+        -s)
+            START_EPOCH=$(date -d "$2" +%s 2>/dev/null)
+            [ -z "$START_EPOCH" ] && { echo "Data start invalidă"; exit 1; }
+            shift 2
+            ;;
+        -t)
+            END_EPOCH=$(date -d "$2" +%s 2>/dev/null)
+            [ -z "$END_EPOCH" ] && { echo "Data end invalidă"; exit 1; }
+            shift 2
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
