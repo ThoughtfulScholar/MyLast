@@ -32,3 +32,13 @@ while [ $# -gt 0 ]; do
             ;;
     esac
 done
+
+read_logs() {
+    for file in /var/log/auth.log*; do
+        if [[ "$file" == *.gz ]]; then
+            zcat "$file"
+        else
+            cat "$file"
+        fi
+    done
+}
