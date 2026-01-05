@@ -44,3 +44,23 @@ read_logs() {
         fi
     done
 }
+read_logs | while read -r line; do
+    is_login=false
+    user=""
+
+    if [[ "$line" == *"sshd"* && "$line" == *"Accepted"* ]]; then
+        user=$(echo "$line" | awk '{for(i=1;i<=NF;i++) if($i=="for"){print $(i+1)}}')
+        is_login=true
+    fi
+
+    if [[ "$line" == *"systemd-logind"* && "$line" == *"New session"* && "$line" == *"of user"* ]]; then
+        user=$(echo "$line" | awk '{for(i=1;i<=NF;i++) if($i=="user"){print $(i+1)}}' | tr -d '.')
+        is_login=true
+    fi
+
+    [ "$is_login" = false ] && continue
+    [ "$user" = "gdm" ] && continue
+
+    log_time=$(echo "$line" | awk '{print $1}')
+    echo "$user logged in at $log_time"
+done
