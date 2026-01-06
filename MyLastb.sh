@@ -1,5 +1,28 @@
 # !/bin/bash
 shopt -s lastpipe
+formatare_auth_failed()
+{
+    info=""
+    while [ "$#" -gt "0" ]; do
+        info+="$1"
+        shift
+    done
+    data=`date -d "${info:0:19}" "+%a %b %d %H:%M"`
+    nume=${info#*rhost=}
+    nume=${nume#*user=}
+    terminal=${info#*tty=}
+    terminal=${terminal#*/dev/}
+    terminal=${terminal%ruser*}
+    if [  $terminal = $info ]; then
+        terminal="ssh:notty"
+    fi
+    sursa=${info#from}
+    if [ $sursa = $info ]; then
+        sursa=""
+    fi
+    echo "$nume ______ $terminal ______ $sursa ______ $data"
+    return 1
+}
 since=""
 until=""
 limit=-1
