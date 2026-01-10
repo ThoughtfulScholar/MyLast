@@ -44,6 +44,7 @@ read_logs() {
         fi
     done
 }
+
 read_logs | while read -r line; do
     is_login=false
     user=""
