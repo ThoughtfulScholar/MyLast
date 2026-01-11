@@ -18,13 +18,15 @@ while [ $# -gt 0 ]; do
             shift 2
             ;;
         -s)
+		[ -z "$2" ] && { echo "Data start invalida"; exit 1; }
             START_EPOCH=$(date -d "$2" +%s 2>/dev/null)
-            [ -z "$START_EPOCH" ] && { echo "Data start invalidă"; exit 1; }
+            [ -z "$START_EPOCH" ] && { echo "Data start invalida"; exit 1; }
             shift 2
             ;;
         -t)
+		[ -z "$2" ] && { echo "Data end invalida"; exit 1; }
             END_EPOCH=$(date -d "$2" +%s 2>/dev/null)
-            [ -z "$END_EPOCH" ] && { echo "Data end invalidă"; exit 1; }
+            [ -z "$END_EPOCH" ] && { echo "Data end invalida"; exit 1; }
             shift 2
             ;;
         *)
