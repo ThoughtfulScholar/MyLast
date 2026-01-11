@@ -74,7 +74,11 @@ while [ $# -gt "0" ]; do
         if [ "${#data}" = "14" ]; then
             data="${data:0:4}-${data:4:2}-${data:6:2} ${data:8:2}:${data:10:2}:${data:12:2}"
         fi
-        since=`date -d "$data" "+%Y-%m-%dT%T"`
+        since=`date -d "$data" "+%Y-%m-%dT%T" 2>/dev/null`
+        if [ -z $since ]; then
+            echo "Formatul datei este invalid"
+            exit -1
+        fi
         ;;
     -t)
         shift
@@ -82,7 +86,11 @@ while [ $# -gt "0" ]; do
         if [ "${#data}" = "14" ]; then
             data="${data:0:4}-${data:4:2}-${data:6:2} ${data:8:2}:${data:10:2}:${data:12:2}"
         fi
-        until=`date -d "$data" "+%Y-%m-%dT%T"`
+        until=`date -d "$data" "+%Y-%m-%dT%T" 2>/dev/null`
+        if [ -z $until ]; then
+            echo "Formatul datei este invalid"
+            exit -1
+        fi
         ;;
     -p)
         shift
@@ -90,12 +98,23 @@ while [ $# -gt "0" ]; do
         if [ "${#data}" = "14" ]; then
             data="${data:0:4}-${data:4:2}-${data:6:2} ${data:8:2}:${data:10:2}:${data:12:2}"
         fi
-        since=`date -d "$data" "+%Y-%m-%dT%T"`
+        since=`date -d "$data" "+%Y-%m-%dT%T" 2>/dev/null`
         until=$since
+        if [ -z $since ]; then
+            echo "Formatul datei este invalid"
+            exit 1
+        fi
         ;;
     -n)
         shift
         limit=$1
+        if [ -n "$limit" ] && ! [ "$limit" -eq "$limit" ] 2>/dev/null ; then
+            echo "Valoarea introdusa nu este un numar"
+            exit 1
+        elif [ $limit -lt "0" ] 2>/dev/null; then
+            echo "Numarul introdus este negativ"
+            exit 1
+        fi
         ;;
     *)
         shift
